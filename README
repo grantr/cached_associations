@@ -1,0 +1,15 @@
+Automatically cache ActiveRecord associations in memcached.
+
+class User < ActiveRecord::Base
+  acts_as_cached
+  belongs_to_cached :group
+end
+
+class Group < ActiveRecord::Base
+  acts_as_cached
+end
+
+Instead of caching the association objects and writing expiration sweepers,
+we cache the association ids and load the objects from memcached by id.
+
+cache_fu is required (for now)
