@@ -1,11 +1,15 @@
 module ActiveRecord
   module CachedAssociations
+
     def self.included(base)
       base.extend(ClassMethods)
     end
 
     module ClassMethods
       def belongs_to_cached(association_id, options = {})
+        [:finder_sql, :group, :include, :select].each do |option|
+          raise "Can't cache associations using :finder_sql, :group, :include, or :select" if options.include?(option)
+        end
         reflection = create_belongs_to_reflection(association_id, options)
         
         if reflection.options[:polymorphic]
